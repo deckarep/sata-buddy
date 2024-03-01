@@ -1,0 +1,5 @@
+cffi==1.16.0
+inflection==0.5.1
+pycparser==2.21
+raylib==5.0.0.1
+setuptools==69.1.1
