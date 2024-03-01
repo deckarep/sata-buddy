@@ -1,0 +1,88 @@
+{
+  "name": "Contagious Diseases",
+  "class": "yada",
+  "date": "yada",
+  "questions": [
+    {
+      "q": "Which diseases have a vaccine available?",
+      "test-on": "vaccine-available",
+      "list-by": "subject"
+    },
+    {
+      "q": "What are the signs and symptoms for {subject}",
+      "test-on": "signs-symptoms",
+      "list-by": "signs-symptoms"
+    },
+    {
+      "TODO": "TODO",
+      "q": "What are the signs and symptoms of {subject}?",
+      "test-on": "signs-symptoms",
+      "list-by": "signs-symptoms"
+    }
+  ],
+  "decks": [
+    {
+      "subject": "5ths Disease (slapped cheek disease)",
+      "transmission": "droplet/contact",
+      "microbe-form": "parvo virus",
+      "signs-symptoms": "rash/ upper respiratory infection/ flu-like symptoms/ sick 24 days",
+      "nursing-interventions": "supportive care",
+      "complications": "anemic",
+      "vaccine-available": "no"
+    },
+    {
+      "subject": "Measles (Rubeola)",
+      "transmission": "airborne",
+      "microbe-form": "virus",
+      "signs-symptoms": "fever/ rash/ malaise/ anorexia/ achy/ conjunctivitis/ cough/ coryza/ spots",
+      "nursing-interventions": "supportive care/ isolation",
+      "complications": "pneumonia",
+      "vaccine-available": "yes"
+    },
+    {
+      "subject": "Varicella (Chicken Pox)",
+      "transmission": "airborne",
+      "microbe-form": "virus",
+      "signs-symptoms": "itchy/ rash/ malaise/ achy/ anorexia",
+      "nursing-interventions": "supportive care/ isolation/ antivirals",
+      "complications": "pneumonia/ cellulitis",
+      "vaccine-available": "yes"
+    },
+    {
+      "subject": "Mumps",
+      "transmission": "droplet/ contact",
+      "microbe-form": "virus",
+      "signs-symptoms": "orchitis/ headache/ gland swelling/ earache/ fever/ malaise/ anorexia/ swollen lymph nodes",
+      "nursing-interventions": "supportive care/ hot or cold press",
+      "complications": "meningitis/ myocarditis/ deafness",
+      "vaccine-available": "yes"
+    },
+    {
+      "subject": "Rubella (German Measles)",
+      "transmission": "droplet/ contact",
+      "microbe-form": "virus",
+      "signs-symptoms": "rash/ swollen lymph nodes/ arthritic joint pain/ cough/ fever/ upper respiratory infection",
+      "nursing-interventions":"supportive care/ isolation (from pregnant)",
+      "complications": "encephalitis",
+      "vaccine-available": "yes"
+    },
+    {
+      "subject": "Pertussis",
+      "transmission": "droplet/ contact",
+      "microbe-form": "bacterial",
+      "signs-symptoms": "cough whooping/ fever/ cyanosis/ upper respiratory infection",
+      "nursing-interventions": "antibiotics macrolides (patient + family)/ oxygen (in hospital)/ fluids + humidity/ suction/ rest",
+      "complications": "seizures (hypoxia)/ ear infection/ pneumonia + atelectasis",
+      "vaccine-available": "yes"
+    },
+    {
+      "subject": "Roseola (6ths disease)",
+      "transmission": "droplet/ contact",
+      "microbe-form": "virus (herpes)",
+      "signs-symptoms": "rash/ fever (no other symptoms)",
+      "nursing-interventions": "supportive care/ seizure precautions",
+      "complications": "seizures (when fever spikes fast)",
+      "vaccine-available": "no"
+    }
+  ]
+}
