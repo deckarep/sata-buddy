@@ -213,12 +213,14 @@ question_builders = [
     ("Which nursing interventions apply to: {title}?", "nursing-interventions", question_by_tag),
     ("{title} may have what complications?", "complications", question_by_tag),
     ("A vaccine exists for {title}?", "vaccine-available", question_by_tag),
-    ("What is the microbe form of {title}?", "microbe-form", question_by_tag),
-    ("What mode of transmission occurs for {title}?", "transmission", question_by_tag),
+    ("What is the microbial form of {title}?", "microbe-form", question_by_tag),
+    ("What method of transmission occurs for {title}?", "transmission", question_by_tag),
 
     # Pivot style
-    ("Select all diseases with a {title} transmission mode?", "transmission", question_by_title),
-    ("Select all diseases with a sign/symptom of {title}?", "signs-symptoms", question_by_title),
+    ("Select all diseases where a vaccine exists?", "vaccine-available", question_by_title),
+    ("Select all diseases with a \"{title}\" complication?", "complications", question_by_title),
+    ("Select all diseases with a \"{title}\" transmission mode?", "transmission", question_by_title),
+    ("Select all diseases with a sign/symptom of \"{title}\"?", "signs-symptoms", question_by_title),
     ("Select all diseases with the following nursing intervention: {title}?", "nursing-interventions", question_by_title),
 ]
 
