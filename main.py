@@ -246,6 +246,20 @@ def load_build_sata():
     while len(questions) < QUESTION_COUNT:
         txt, tag, q_builder = one_of(question_builders)
         new_question = q_builder(txt, tag, super_set, doc["decks"])
+        # If we generated a question that has no answers, throw it out for now.
+        # In the future find this bug!
+        has_answer = False
+        for a in new_question.get('a'):
+            if a == True:
+                has_answer = True
+                break
+
+        if not has_answer:
+            # TODO: find out why this happens and fix it.
+            print("Throwing out a question because no answers were found!!")
+            print(new_question)
+            continue
+
         title = new_question.get('q')
         # for now, will consider choices in various order as unique
         choices = ",".join(sorted(new_question.get('choices')))
