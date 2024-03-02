@@ -136,7 +136,7 @@ def question_by_title(txt:str, tag:str, super_set:dict, deck:list) -> dict:
 
     # 1. populate correct answers first
     selected_chosen_answers = set()
-    max_attempts = 20
+    max_attempts = 100 # yes a hack.
     tries = 0
     while len(selected_chosen_answers) != how_many_correct:
         tmp = one_of(deck)
@@ -145,6 +145,8 @@ def question_by_title(txt:str, tag:str, super_set:dict, deck:list) -> dict:
         if tries > max_attempts:
             break
         tries +=1
+
+    assert len(selected_chosen_answers) >= 1, "at least one answer must exist!!"
 
     # 2. now select only wrong answers for the remaining.
     wrong_answers = set()
