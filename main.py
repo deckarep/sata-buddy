@@ -125,8 +125,52 @@ def choose_incorrect(super_set:set, all_answers:set, how_many:int) -> list:
 
     return list(selected)
 
+def question_by_title(txt:str, tag:str, super_set:dict, deck:list) -> dict:
+    # 1. for the tag type provided choose 4 possible options
+    how_many_correct = random.randint(1, 3)
+    pivot_choice = one_of(list(super_set[tag]))
 
-def question_by_tag(txt:str, tag:str, super_set:set, deck:list) -> dict:
+    # 0. Dev note: this brute force and re-processing of set logic is stupid.
+    # It's not efficient, but I'm racing the clock to help the wife with her study habit
+    # She is a nursing student and needs this now, I can always optimize later.
+
+    # 1. populate correct answers first
+    selected_chosen_answers = set()
+    max_attempts = 20
+    tries = 0
+    while len(selected_chosen_answers) != how_many_correct:
+        tmp = one_of(deck)
+        if pivot_choice in set([s.strip() for s in tmp.get(tag).split("/")]):
+            selected_chosen_answers.add(tmp.get("subject"))
+        if tries > max_attempts:
+            break
+        tries +=1
+
+    # 2. now select only wrong answers for the remaining.
+    wrong_answers = set()
+    left_over = 4 - how_many_correct
+    max_attempts = len(deck)
+    tries = 0
+    while (len(wrong_answers) != left_over):
+        tmp = one_of(deck)
+        if pivot_choice not in set([s.strip() for s in tmp.get(tag).split("/")]):
+            wrong_answers.add(tmp.get("subject"))
+        if tries > max_attempts:
+            break
+        tries +=1
+
+    presented = list(selected_chosen_answers | wrong_answers)
+    user = [False] * len(presented)
+    answers = [True if s in selected_chosen_answers else False for s in presented]
+
+    return {
+        "q": txt.replace("{title}", pivot_choice),
+        "choices": presented,
+        "user": user,
+        "a": answers,
+    }
+
+def question_by_tag(txt:str, tag:str, super_set:dict, deck:list) -> dict:
     # 1. Select random disease.
     rand_disease = one_of(deck)
     title = rand_disease.get("subject")
@@ -141,7 +185,7 @@ def question_by_tag(txt:str, tag:str, super_set:set, deck:list) -> dict:
     presented_answers = set(selected_chosen_answers) | set(selected_wrong_answers)
 
     # Going to support between 2-4 answers (inclusive).
-    # Some answers like yes or no, impossible to have more than 2 options!
+    # Some answers like yes or no, impossible to have more than 2 options! Should add maybe?
     assert 1 < len(presented_answers) <= 4, "final presented answers must be 4 only!"
 
     presented = list(presented_answers)
@@ -164,12 +208,18 @@ def question_by_tag(txt:str, tag:str, super_set:set, deck:list) -> dict:
     }
 
 question_builders = [
-    # ("Which signs & symptoms are present in: {title}?", "signs-symptoms", question_by_tag),
-    # ("Which nursing interventions apply to: {title}?", "nursing-interventions", question_by_tag),
-    # ("{title} may have what complications?", "complications", question_by_tag),
-    # ("A vaccine exists for {title}?", "vaccine-available", question_by_tag),
-    # ("What is the microbe form of {title}?", "microbe-form", question_by_tag),
+    # Regular style
+    ("Which signs & symptoms are present in: {title}?", "signs-symptoms", question_by_tag),
+    ("Which nursing interventions apply to: {title}?", "nursing-interventions", question_by_tag),
+    ("{title} may have what complications?", "complications", question_by_tag),
+    ("A vaccine exists for {title}?", "vaccine-available", question_by_tag),
+    ("What is the microbe form of {title}?", "microbe-form", question_by_tag),
     ("What mode of transmission occurs for {title}?", "transmission", question_by_tag),
+
+    # Pivot style
+    ("Select all diseases with a {title} transmission mode?", "transmission", question_by_title),
+    ("Select all diseases with a sign/symptom of {title}?", "signs-symptoms", question_by_title),
+    ("Select all diseases with the following nursing intervention: {title}?", "nursing-interventions", question_by_title),
 ]
 
 
@@ -189,9 +239,22 @@ def load_build_sata():
                 else:
                     super_set[k].add(v)  # parse_element(v))
 
-    for i in range(QUESTION_COUNT):
+    # Ensure some degree of uniqueness via question + choices combinations to mitigate redundancy.
+    track_dupes = set()
+    while len(questions) < QUESTION_COUNT:
         txt, tag, q_builder = one_of(question_builders)
-        questions.append(q_builder(txt, tag, super_set, doc["decks"]))
+        new_question = q_builder(txt, tag, super_set, doc["decks"])
+        title = new_question.get('q')
+        # for now, will consider choices in various order as unique
+        choices = ",".join(sorted(new_question.get('choices')))
+        unique = f"{title} {choices}"
+        if new_question.get("q") in track_dupes:
+            print(f"Question len: {len(questions)} -- throwing out duplicate question: ", unique)
+            continue
+        track_dupes.add(unique)
+        #print(f"Question added: {unique}")
+        questions.append(new_question)
+
 
 def init_game():
     global wrong_tally, correct_tally, QUESTION_IDX, game_state
